@@ -6,6 +6,8 @@ github.com/polarysfoundation/pec-256 v0.0.0-20250112200718-8ded1217e3f1 h1:wQyk6
 github.com/polarysfoundation/pec-256 v0.0.0-20250112200718-8ded1217e3f1/go.mod h1:El0l2V+yElBUHPh0zhth0m5lCk8ZMTMr9xHD4Yi5SHE=
 github.com/polarysfoundation/pm-256 v0.0.0-20250112065549-cb7b6eb92c94 h1:03/yJyAO/dHAF79VUjoCiFJgiVI7wCZ2jq2qD7mctM0=
 github.com/polarysfoundation/pm-256 v0.0.0-20250112065549-cb7b6eb92c94/go.mod h1:9/TxgrEcbGlDpNNoKLc5eWGNEI3pRRkPf8y6ZFV/7bg=
+github.com/polarysfoundation/polarys_db v0.0.0-20250205023156-5897861e623d h1:Ujz0YZwsU5Qe5p7VBs4sJPP2iljNF2tBLpohwF7JoBQ=
+github.com/polarysfoundation/polarys_db v0.0.0-20250205023156-5897861e623d/go.mod h1:MhTEOYBpE+BoZB7RJM9mO/ILL+/Mkw9mGxZ0RcMAUpw=
 github.com/stretchr/testify v1.10.0 h1:Xv5erBjTwe/5IxqUQTdXv5kgmIvbHo3QQyRwhJsOfJA=
 github.com/stretchr/testify v1.10.0/go.mod h1:r2ic/lqez/lEtzL7wO/rwa5dbSLXVDPFyf8C91i36aY=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=

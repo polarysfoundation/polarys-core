@@ -43,7 +43,7 @@ func TestHexToAddress(t *testing.T) {
 	s := "0x7465737461646472657373"
 	addr := HexToAddress(s)
 	t.Logf("Converted hex to address: %v", addr)
-	expected := BytesToAddress(addr.ToBytes())
+	expected := BytesToAddress(addr.Bytes())
 	if addr != expected {
 		t.Errorf("Expected '%v', got '%v'", expected, addr)
 	}
@@ -52,37 +52,37 @@ func TestHexToAddress(t *testing.T) {
 func TestAddressToString(t *testing.T) {
 	t.Log("Starting TestAddressToString")
 	b := GenerateAddress()
-	addr := BytesToAddress(b.ToBytes())
-	t.Logf("Converted address to string: %s", addr.ToString())
-	expected := b.ToString()
-	addrStr := addr.ToString()
+	addr := BytesToAddress(b.Bytes())
+	t.Logf("Converted address to string: %s", addr.String())
+	expected := b.String()
+	addrStr := addr.String()
 	log.Print(len(addrStr[len(addrStr)-len(expected):]))
 	log.Print(len(expected))
 	log.Printf("Bytes of result: %v", []byte(addrStr))
 	log.Printf("Bytes of expected: %v", []byte(expected))
 	if addrStr != expected {
-		t.Errorf("Expected '%s', got '%s'", expected, addr.ToString())
+		t.Errorf("Expected '%s', got '%s'", expected, addr.String())
 	}
 }
 
 func TestAddressToBytes(t *testing.T) {
 	t.Log("Starting TestAddressToBytes")
 	b := GenerateAddress()
-	addr := BytesToAddress(b.ToBytes())
-	t.Logf("Converted address to bytes: %v", addr.ToBytes())
-	if addr.ToString() != b.ToString() {
-		t.Errorf("Expected 'testaddress', got '%s'", string(addr.ToBytes()[:len(b)]))
+	addr := BytesToAddress(b.Bytes())
+	t.Logf("Converted address to bytes: %v", addr.Bytes())
+	if addr.String() != b.String() {
+		t.Errorf("Expected 'testaddress', got '%s'", string(addr.Bytes()[:len(b)]))
 	}
 }
 
 func TestAddressToHex(t *testing.T) {
 	t.Log("Starting TestAddressToHex")
 	b := GenerateAddress()
-	addr := BytesToAddress(b.ToBytes())
-	t.Logf("Converted address to hex: %s", addr.ToHex())
-	expected := b.ToHex()
-	if addr.ToHex() != expected {
-		t.Errorf("Expected '%s', got '%s'", expected, addr.ToHex())
+	addr := BytesToAddress(b.Bytes())
+	t.Logf("Converted address to hex: %s", addr.Hex())
+	expected := b.Hex()
+	if addr.Hex() != expected {
+		t.Errorf("Expected '%s', got '%s'", expected, addr.Hex())
 	}
 }
 
@@ -101,9 +101,9 @@ func TestSetBytesAddress(t *testing.T) {
 	t.Log("Starting TestSetBytesAddress")
 	var addr Address
 	b := GenerateAddress()
-	addr.SetBytes(b.ToBytes())
+	addr.SetBytes(b.Bytes())
 	t.Logf("Set bytes to address: %v", addr)
-	if addr.ToString() != b.ToString() {
+	if addr.String() != b.String() {
 		t.Errorf("Expected 'testaddress', got '%s'", string(addr[:len(b)]))
 	}
 }

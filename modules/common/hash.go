@@ -1,7 +1,6 @@
 package common
 
 import (
-	"encoding/hex"
 	"math/big"
 )
 
@@ -19,20 +18,20 @@ func (h *Hash) SetBytes(b []byte) {
 	copy(h[hashLen-len(b):], b)
 }
 
-func (h Hash) ToBytes() []byte {
+func (h Hash) Bytes() []byte {
 	return h[:]
 }
 
-func (h Hash) ToString() string {
+func (h Hash) String() string {
 	return string(h.flexhex())
 }
 
-func (h Hash) ToHex() string {
+func (h Hash) Hex() string {
 	return string(h.hex())
 }
 
-func (h Hash) ToBigInt() *big.Int {
-	return new(big.Int).SetBytes(h.ToBytes())
+func (h Hash) BigInt() *big.Int {
+	return new(big.Int).SetBytes(h.Bytes())
 }
 
 func (h Hash) flexhex() []byte {
@@ -72,14 +71,14 @@ func HexToHash(s string) Hash {
 		s = s[2:]
 	}
 
-	b, _ := hex.DecodeString(s)
+	b := decode(s)
 	return BytesToHash(b)
 }
 
-func has0xPrefix(s string) bool {
-	return len(s) >= 2 && s[0] == '0' && s[1] == 'x'
-}
-
 func FlexHexToHash(f string) Hash {
-	return BytesToHash([]byte(f))
+	if has1cxPrefix(f) {
+		f = f[3:]
+	}
+	b := decode(f)
+	return BytesToHash(b)
 }

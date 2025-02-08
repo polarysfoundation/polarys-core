@@ -56,7 +56,11 @@ func copyHeader(header *Header) *Header {
 	}
 }
 
-func (h Header) marshal() ([]byte, error) {
+func (h *Header) SignBlock() error {
+	return nil
+}
+
+func (h *Header) marshal() ([]byte, error) {
 	return json.Marshal(h)
 }
 

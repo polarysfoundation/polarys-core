@@ -1,6 +1,8 @@
 package transaction
 
 import (
+	"encoding/json"
+	"fmt"
 	"log"
 	"math/big"
 
@@ -12,6 +14,8 @@ type Transaction struct {
 	tx        Tx
 	hash      common.Hash
 	signature []byte
+
+	signerHash common.Hash
 }
 
 func NewTransaction(tx *Tx) *Transaction {
@@ -22,6 +26,53 @@ func NewTransaction(tx *Tx) *Transaction {
 	transaction.calculateHash()
 
 	return transaction
+}
+
+func (tx *Transaction) AddSignerHash(h common.Hash) error {
+	if h.IsEmpty() {
+		return fmt.Errorf("error adding signer hash, hash is empty")
+	}
+
+	tx.signerHash = h
+
+	return nil
+}
+
+func (tx *Transaction) MarshalJSON() ([]byte, error) {
+	aux := struct {
+		Tx         Tx          `json:"txBody"`
+		Hash       common.Hash `json:"hash"`
+		Signature  []byte      `json:"signature"`
+		SignerHash common.Hash `json:"signerHash"`
+	}{
+		Tx:         tx.tx,
+		Hash:       tx.hash,
+		Signature:  tx.signature,
+		SignerHash: tx.signerHash,
+	}
+
+	return json.Marshal(aux)
+}
+
+func (tx *Transaction) UnmarshalJSON(b []byte) error {
+	aux := struct {
+		Tx         Tx          `json:"txBody"`
+		Hash       common.Hash `json:"hash"`
+		Signature  []byte      `json:"signature"`
+		SignerHash common.Hash `json:"signerHash"`
+	}{}
+
+	if err := json.Unmarshal(b, &aux); err != nil {
+		return err
+	}
+
+	tx.hash = aux.Hash
+	tx.signature = aux.Signature
+	tx.signerHash = aux.SignerHash
+	tx.tx = aux.Tx
+
+	return nil
+
 }
 
 func (tx *Transaction) calculateHash() {

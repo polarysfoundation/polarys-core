@@ -21,14 +21,14 @@ func TestCalculateHash(t *testing.T) {
 	transaction := NewTransaction(tx)
 	transaction.calculateHash()
 
-	t.Logf("Computed hash: %v", transaction.hash.ToHex())
+	t.Logf("Computed hash: %v", transaction.hash.Hex())
 
 	if transaction.hash.IsEmpty() {
 		t.Errorf("calculateHash failed, hash is empty")
 	}
 
 	expectedHash := common.HexToHash("0xe49bedb384f288c746895019ad8af44598ada9ecef31d76bc0fe8e2b1de331be") // Replace with the actual expected hash value
-	t.Logf("Expected hash: %v", expectedHash.ToHex())
+	t.Logf("Expected hash: %v", expectedHash.Hex())
 
 	if transaction.hash != expectedHash {
 		t.Errorf("calculateHash failed, expected %v, got %v", expectedHash, transaction.hash)
@@ -50,11 +50,11 @@ func TestCalculateHashWithExistingHash(t *testing.T) {
 	initialHash := common.BytesToHash([]byte{13, 14, 15, 16})
 	transaction.hash = initialHash
 
-	t.Logf("Initial hash set: %v", initialHash.ToHex())
+	t.Logf("Initial hash set: %v", initialHash.Hex())
 
 	transaction.calculateHash()
 
-	t.Logf("Computed hash: %v", transaction.hash.ToHex())
+	t.Logf("Computed hash: %v", transaction.hash.Hex())
 
 	if transaction.hash == initialHash {
 		t.Errorf("calculateHash failed, expected hash to be recomputed, got %v", transaction.hash)
@@ -76,7 +76,7 @@ func TestCalculateHashForMultipleTransactions(t *testing.T) {
 		transaction := NewTransaction(tx)
 		transaction.calculateHash()
 
-		t.Logf("Transaction %d hash: %s", i+1, transaction.Hash().ToHex())
+		t.Logf("Transaction %d hash: %s", i+1, transaction.Hash().Hex())
 
 		if transaction.hash.IsEmpty() {
 			t.Errorf("calculateHash failed at transaction %d, hash is empty", i+1)

@@ -34,32 +34,37 @@ func StringToAddress(s string) Address {
 }
 
 func HexToAddress(s string) Address {
-	if len(s) > 1 && s[:2] == "0x" {
+	if has0xPrefix(s) {
 		s = s[2:]
-	} else {
-		return Address{}
 	}
-	return BytesToAddress([]byte(s))
+
+	b := decode(s)
+
+	return BytesToAddress(b)
 }
 
 func FlexHexToAddress(f string) Address {
-	return BytesToAddress([]byte(f))
+	if has1cxPrefix(f) {
+		f = f[3:]
+	}
+	b := decode(f)
+	return BytesToAddress(b)
 }
 
-func (a Address) ToString() string {
+func (a Address) String() string {
 	return string(a.flexhex())
 }
 
-func (a Address) ToBytes() []byte {
+func (a Address) Bytes() []byte {
 	return a[:]
 }
 
-func (a Address) ToHex() string {
+func (a Address) Hex() string {
 	return string(a.hex())
 }
 
 func (a Address) ToBigInt() *big.Int {
-	return new(big.Int).SetBytes(a.ToBytes())
+	return new(big.Int).SetBytes(a.Bytes())
 }
 
 func (a Address) Length() int {
@@ -89,7 +94,6 @@ func encode(dst, src []byte) int {
 	}
 	return len(src) * 2
 }
-
 
 func (a *Address) SetBytes(b []byte) {
 	if len(b) > len(a) {

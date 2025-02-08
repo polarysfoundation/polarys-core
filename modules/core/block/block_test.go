@@ -23,7 +23,7 @@ func TestCalculateHash(t *testing.T) {
 		ExtraData:       []byte("extra data"),
 	}
 
-	block := NewBlock(header)
+	block := NewBlock(header, nil)
 	block.calculateHash()
 
 	if block.hash.IsEmpty() {
@@ -31,8 +31,8 @@ func TestCalculateHash(t *testing.T) {
 	}
 
 	expectedHash := common.HexToHash("b6f8829aec00e05173333e6ebfeea6c717ec869336aeb3889f0655c3214aee5a")
-	t.Logf("Expected hash: %v", expectedHash.ToHex())
-	t.Logf("Computed hash: %v", block.hash.ToHex())
+	t.Logf("Expected hash: %v", expectedHash.Hex())
+	t.Logf("Computed hash: %v", block.hash.Hex())
 
 	if block.hash != expectedHash {
 		t.Errorf("calculateHash failed, expected %v, got %v", expectedHash, block.hash)
@@ -55,7 +55,7 @@ func TestCalculateHashWithExistingHash(t *testing.T) {
 		ExtraData:       []byte("extra data"),
 	}
 
-	block := NewBlock(header)
+	block := NewBlock(header, nil)
 	initialHash := common.BytesToHash([]byte{13, 14, 15, 16})
 	block.hash = initialHash
 	block.calculateHash()
@@ -81,14 +81,14 @@ func TestCalculateHashForMiningBlock(t *testing.T) {
 		ExtraData:       []byte("extra data"),
 	}
 
-	block := NewBlock(header)
+	block := NewBlock(header, nil)
 	block.calculateHash()
 
 	if block.hash.IsEmpty() {
 		t.Errorf("calculateHash failed, hash is empty")
 	}
 
-	t.Logf("Computed hash: %v", block.hash.ToHex())
+	t.Logf("Computed hash: %v", block.hash.Hex())
 
 	expectedHash := common.HexToHash("b6f8829aec00e05173333e6ebfeea6c717ec869336aeb3889f0655c3214aee5a")
 	if block.hash != expectedHash {
@@ -113,10 +113,10 @@ func TestMineBlocks(t *testing.T) {
 			ExtraData:       []byte("extra data"),
 		}
 
-		block := NewBlock(header)
+		block := NewBlock(header, nil)
 		block.calculateHash()
 
-		t.Logf("block hash: %s", block.Hash().ToHex())
+		t.Logf("block hash: %s", block.Hash().Hex())
 
 		if block.hash.IsEmpty() {
 			t.Errorf("calculateHash failed at block %d, hash is empty", i+1)

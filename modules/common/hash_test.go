@@ -24,8 +24,8 @@ func TestToBytes(t *testing.T) {
 	h := BytesToHash([]byte{1, 2, 3, 4})
 	expected := make([]byte, hashLen)
 	copy(expected[hashLen-4:], []byte{1, 2, 3, 4})
-	if !equal(h.ToBytes(), expected) {
-		t.Errorf("ToBytes failed, expected %v, got %v", expected, h.ToBytes())
+	if !equal(h.Bytes(), expected) {
+		t.Errorf("ToBytes failed, expected %v, got %v", expected, h.Bytes())
 	} else {
 		t.Log("ToBytes passed")
 	}
@@ -34,9 +34,9 @@ func TestToBytes(t *testing.T) {
 func TestToString(t *testing.T) {
 	t.Log("Starting TestToString")
 	h := BytesToHash([]byte{1, 2, 3, 4})
-	expected := h.ToString()
-	if h.ToString() != expected {
-		t.Errorf("ToString failed, expected %v, got %v", expected, h.ToString())
+	expected := h.String()
+	if h.String() != expected {
+		t.Errorf("ToString failed, expected %v, got %v", expected, h.String())
 	} else {
 		t.Log("ToString passed")
 	}
@@ -45,9 +45,9 @@ func TestToString(t *testing.T) {
 func TestToBigInt(t *testing.T) {
 	t.Log("Starting TestToBigInt")
 	h := BytesToHash([]byte{1, 2, 3, 4})
-	expected := new(big.Int).SetBytes(h.ToBytes())
-	if h.ToBigInt().Cmp(expected) != 0 {
-		t.Errorf("ToBigInt failed, expected %v, got %v", expected, h.ToBigInt())
+	expected := new(big.Int).SetBytes(h.Bytes())
+	if h.BigInt().Cmp(expected) != 0 {
+		t.Errorf("ToBigInt failed, expected %v, got %v", expected, h.BigInt())
 	} else {
 		t.Log("ToBigInt passed")
 	}
