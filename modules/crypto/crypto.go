@@ -1,11 +1,34 @@
 package crypto
 
 import (
+	"log"
 	"math/big"
 
+	pec256 "github.com/polarysfoundation/pec-256"
 	pm256 "github.com/polarysfoundation/pm-256"
 	"github.com/polarysfoundation/polarys-core/modules/common"
 )
+
+var c = pec256.PEC256()
+
+func GenerateKey() (pec256.PrivKey, pec256.PubKey) {
+	priv, pub, _, err := c.GenerateKeyPair()
+	if err != nil {
+		log.Printf("error generating keys: %v", err)
+		panic("error creating new keypair")
+	}
+
+	return priv, pub
+}
+
+func GenerateSharedKey(priv pec256.PrivKey) pec256.SharedKey {
+	return c.SharedKey(priv)
+}
+
+func GeneratePubkey(priv pec256.PrivKey) pec256.PubKey {
+	pub, _ := c.GetPubKey(priv)
+	return pub
+}
 
 func Pm256(b []byte) []byte {
 	buf := make([]byte, 32)
