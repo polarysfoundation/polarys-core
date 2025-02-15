@@ -91,3 +91,19 @@ func TestGenerateSharedKeyFromPrivKey(t *testing.T) {
 	assert.NotNil(t, sharedKey, "Shared key should not be nil")
 	log.Println("Finished TestGenerateSharedKeyFromPrivKey")
 }
+func TestVerify(t *testing.T) {
+
+	log.Println("Starting TestVerify")
+	for i := 0; i < 1000; i++ {
+		priv, pub := GenerateKey()
+		data := Pm256(priv.Bytes())
+		dataBytes := common.BytesToHash(data)
+		log.Printf("hash to sign: %s", dataBytes.Hex())
+		r, s, err := Sign(dataBytes, priv)
+		assert.Nil(t, err, "Error signing data")
+		valid, err := Verify(dataBytes, r, s, pub)
+		assert.Nil(t, err, "Error verifying signature")
+		assert.True(t, valid, "Signature should be valid")
+	}
+	log.Println("Finished TestVerify")
+}

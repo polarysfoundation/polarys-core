@@ -16,7 +16,7 @@ func TestNewTx(t *testing.T) {
 	nonce := uint64(1)
 	data := []byte("transaction data")
 
-	tx := NewTx(from, to, value, nonce, data)
+	tx := NewLegacyTx(from, to, value, nonce, data, []byte(""))
 
 	log.Printf("Created transaction: %+v", tx)
 
@@ -46,7 +46,8 @@ func TestCopyTx(t *testing.T) {
 	nonce := uint64(1)
 	data := []byte("transaction data")
 
-	tx := NewTx(from, to, value, nonce, data)
+	tx := NewLegacyTx(from, to, value, nonce, data, []byte(""))
+
 	txCopy := copyTx(tx)
 
 	log.Printf("Original transaction: %+v", tx)
@@ -78,7 +79,7 @@ func TestMarshalUnmarshalTx(t *testing.T) {
 	nonce := uint64(1)
 	data := []byte("transaction data")
 
-	tx := NewTx(from, to, value, nonce, data)
+	tx := NewLegacyTx(from, to, value, nonce, data, []byte(""))
 	marshaledTx, err := tx.marshal()
 	if err != nil {
 		t.Fatalf("marshal failed: %v", err)

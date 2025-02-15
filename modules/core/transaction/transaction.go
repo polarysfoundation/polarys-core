@@ -6,8 +6,8 @@ import (
 	"log"
 	"math/big"
 
-	pm256 "github.com/polarysfoundation/pm-256"
 	"github.com/polarysfoundation/polarys-core/modules/common"
+	"github.com/polarysfoundation/polarys-core/modules/crypto"
 )
 
 type Transaction struct {
@@ -23,9 +23,17 @@ func NewTransaction(tx *Tx) *Transaction {
 
 	transaction.tx = *copyTx(tx)
 
-	transaction.calculateHash()
-
 	return transaction
+}
+
+func (tx *Transaction) SignTransaction(signature []byte) *Transaction {
+	auxTx := copyTransaction(tx)
+
+	auxTx.signature = signature
+
+	auxTx.calculateHash()
+
+	return auxTx
 }
 
 func (tx *Transaction) AddSignerHash(h common.Hash) error {
@@ -78,17 +86,24 @@ func (tx *Transaction) UnmarshalJSON(b []byte) error {
 func (tx *Transaction) calculateHash() {
 	txCopy := &tx.tx
 
-	var buf common.Hash
-	d, err := txCopy.marshal()
-	if err != nil {
-		log.Printf("error: %v", err)
-		panic("error marshaling header block")
+	if len(tx.signature) == 0 {
+		log.Print("empty signature cannot calculate hash")
+		return
 	}
 
-	h := pm256.New256()
-	h.Write(d)
-	h.Sum(buf[:0])
-	tx.hash = buf
+	b, err := txCopy.marshal()
+	if err != nil {
+		log.Printf("error: %v", err)
+		panic("error marshaling tx body")
+	}
+
+	buff := make([]byte, len(b)+len(tx.signature))
+
+	copy(buff[len(b):], b)
+	copy(buff[len(b)+len(tx.signature):], tx.signature)
+
+	h := crypto.Pm256(buff)
+	tx.hash = common.BytesToHash(h)
 }
 
 func (tx *Transaction) Hash() common.Hash    { return tx.hash }
@@ -98,3 +113,26 @@ func (tx *Transaction) Value() *big.Int      { return tx.tx.Value }
 func (tx *Transaction) Nonce() uint64        { return tx.tx.Nonce }
 func (tx *Transaction) Signature() []byte    { return tx.signature }
 func (tx *Transaction) Data() []byte         { return tx.tx.Data }
+func (tx *Transaction) Type() Version        { return tx.tx.Type }
+func (tx *Transaction) Payload() []byte      { return tx.tx.Payload }
+
+func (tx *Transaction) Print() {
+	log.Printf("From: %s", tx.From().String())
+	log.Printf("To: %s", tx.To().String())
+	log.Printf("Value: %d", tx.Value())
+	log.Printf("Nonce: %d", tx.Nonce())
+	log.Printf("Signature: %s", common.EncodeToString(tx.Signature()))
+	log.Printf("Data: %s", common.EncodeToString(tx.Data()))
+	log.Printf("Type: %d", tx.Type())
+	log.Printf("Hash: %s", tx.Hash().String())
+	log.Printf("Payload: %s", string(tx.Payload()))
+}
+
+func copyTransaction(tx *Transaction) *Transaction {
+	return &Transaction{
+		tx:         tx.tx,
+		hash:       tx.hash,
+		signature:  tx.signature,
+		signerHash: tx.signerHash,
+	}
+}

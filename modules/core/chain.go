@@ -3,6 +3,7 @@ package core
 import "github.com/polarysfoundation/polarys-core/modules/core/block"
 
 type Chain struct {
+	cachedBlocks         []*block.Block
 	currentBlock         *block.Block
 	snapshot             *block.Block
 	latestConsensusBlock *block.Block
